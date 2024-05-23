@@ -1,38 +1,20 @@
-const Header = ({ course }) => <h1>{course}</h1>;
+import Course from "./components/Course";
+import Header from "./components/Header";
+import Total from "./components/Total";
 
-const Course = ({ course }) => {
+export const App = ({ courses }) => {
   return (
     <>
-      {course.parts.map(({ name, exercises }) => {
+      {courses.map((course) => {
+        const { id, name, parts } = course;
         return (
-          <div key={course.id}>
-            {name} {exercises}
+          <div key={id}>
+            <Header course={name} />
+            <Course parts={parts} />
+            <Total parts={parts} />
           </div>
         );
       })}
     </>
-  );
-};
-
-/*/const Part = ({ part, exercises }) => (
-  <p>
-    {" "}
-    {part}
-    {exercises}
-  </p>
-);/*/
-
-const Total = ({ parts }) => {
-  const total = parts.reduce((sum, part) => sum + part.exercises, 0);
-  return <b>total of {total} exercises</b>;
-};
-
-export const App = ({ course }) => {
-  return (
-    <div>
-      <Header course={course.name} />
-      <Course course={course} />
-      <Total parts={course.parts} />
-    </div>
   );
 };
