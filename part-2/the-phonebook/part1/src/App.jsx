@@ -24,6 +24,59 @@ const PersonListItem = ({ person }) => {
   );
 };
 
+const PersonForm = ({ newPerson, handleInputChange, addPerson }) => {
+  return (
+    <>
+      <form onSubmit={addPerson}>
+        <div>
+          <label htmlFor="name">Name: </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={newPerson.name}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="phone">Phone: </label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            value={newPerson.phone}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <br />
+
+        <button type="submit">save</button>
+      </form>
+    </>
+  );
+};
+
+const InputFilter = ({ search, setSearch }) => {
+  return (
+    <>
+      <h2>Phonebook</h2>
+
+      <div>
+        <input
+          type="text"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="Search by name"
+        />
+      </div>
+    </>
+  );
+};
+
 const emptyPerson = { name: "", phone: "" };
 
 const App = () => {
@@ -57,48 +110,14 @@ const App = () => {
 
   return (
     <div>
-      <h2>Phonebook</h2>
-
-      <div>
-        <input
-          type="text"
-          onChange={(e) => setSearch(e.target.value)}
-          value={search}
-          placeholder="Search by name"
-        />
-      </div>
+      <InputFilter value={search} setSearch={setSearch} />
 
       <br />
-
-      <form onSubmit={addPerson}>
-        <div>
-          <label htmlFor="name">Name: </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={newPerson.name}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label htmlFor="phone">Phone: </label>
-          <input
-            type="text"
-            id="phone"
-            name="phone"
-            value={newPerson.phone}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">save</button>
-      </form>
+      <PersonForm
+        newPerson={newPerson}
+        handleInputChange={handleInputChange}
+        addPerson={addPerson}
+      />
 
       <PersonList
         persons={
