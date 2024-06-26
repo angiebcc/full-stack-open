@@ -3,48 +3,131 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
-const Person = ({ person }) => {
-  return <>{person.content}</>;
+const PersonList = ({ persons }) => {
+  return (
+    <>
+      <h2>Numbers</h2>
+      <ul>
+        {persons.map((person) => (
+          <PersonListItem key={person.id} person={person} />
+        ))}
+      </ul>
+    </>
+  );
 };
 
+const PersonListItem = ({ person }) => {
+  return (
+    <li>
+      {person.name} {person.phone}
+    </li>
+  );
+};
+
+const PersonForm = ({ newPerson, handleInputChange, addPerson }) => {
+  return (
+    <>
+      <form onSubmit={addPerson}>
+        <div>
+          <label htmlFor="name">Name: </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            value={newPerson.name}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <br />
+
+        <div>
+          <label htmlFor="phone">Phone: </label>
+          <input
+            type="text"
+            id="phone"
+            name="phone"
+            value={newPerson.phone}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <br />
+
+        <button type="submit">save</button>
+      </form>
+    </>
+  );
+};
+
+const InputFilter = ({ search, setSearch }) => {
+  return (
+    <>
+      <h2>Phonebook</h2>
+
+      <div>
+        <input
+          type="text"
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          placeholder="Search by name"
+        />
+      </div>
+    </>
+  );
+};
+
+const emptyPerson = { name: "", phone: "" };
+
 const App = () => {
-  const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
-  const [newName, setNewName] = useState("");
+  const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 0 }]);
+  const [newPerson, setNewPerson] = useState(emptyPerson);
+  const [search, setSearch] = useState("");
 
-  const handleNameChange = (event) => {
-    setNewName(event.target.value);
-    console.log(event.target.value);
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+
+    setNewPerson((person) => {
+      return { ...person, [name]: value };
+    });
   };
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
-    const personObject = {
-      content: newName,
-      important: Math.random() < 0.5,
-      id: persons.length + 1,
-    };
-    setPersons(persons.concat(personObject));
-    setNewName("");
-  };
 
-  const person = allPersons.filter((person) => {
-    person.name === newName;
-  });
+    const hasAlreadyAddedPerson = persons.some(
+      (person) => person.name === newPerson.name
+    );
+
+    if (hasAlreadyAddedPerson) {
+      window.alert(`${newPerson.name} is already added to phonebook`);
+      return;
+    }
+
+    setPersons(persons.concat({ ...newPerson, id: persons.length + 1 }));
+    setNewPerson(emptyPerson);
+  };
 
   return (
     <div>
-      <h2>Phonebook</h2>
-      <>
-        {persons.map((person) => (
-          <Person key={person.id} person={person} />
-        ))}
-      </>
-      <form onSubmit={addName}>
-        <input value={newName} onChange={handleNameChange} />
-        <button type="submit">save</button>
-      </form>
-      <h2>Numbers</h2>
-      ...
+      <InputFilter value={search} setSearch={setSearch} />
+
+      <br />
+      <PersonForm
+        newPerson={newPerson}
+        handleInputChange={handleInputChange}
+        addPerson={addPerson}
+      />
+
+      <PersonList
+        persons={
+          search === ""
+            ? persons
+            : persons.filter((person) =>
+                person.name.toUpperCase().includes(search.toUpperCase())
+              )
+        }
+      />
     </div>
   );
 };
