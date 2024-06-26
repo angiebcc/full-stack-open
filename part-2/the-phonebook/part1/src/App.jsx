@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -83,6 +83,12 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 0 }]);
   const [newPerson, setNewPerson] = useState(emptyPerson);
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    axios.get("http://localhost:3001/persons").then((response) => {
+      setPersons(response.data);
+    });
+  }, []);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
