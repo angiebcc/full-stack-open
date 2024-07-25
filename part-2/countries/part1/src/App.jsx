@@ -20,6 +20,9 @@ const InputFilter = ({ search, setSearch }) => {
 };
 
 const CountryList = ({ countries }) => {
+  if (countries.length > 10) {
+    return <p>Too many matches, specify another filter</p>;
+  }
   return (
     <ul>
       {countries.map((country) => (
@@ -55,60 +58,22 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [countries, setAllCountries] = useState([]);
 
-  const handleCountryChange = (event) => {
-    setAllCountries(event.target.value);
-  };
-
   useEffect(() => {
     axios
       .get("https://studies.cs.helsinki.fi/restcountries/api/all")
       .then((response) => {
-        console.log(response);
         setAllCountries(response.data);
       });
   }, []);
 
-  const filteredContries = () => {
-    if (search === "") {
-      return [];
-    }
-
-    const filtered = countries.filter((country) =>
-      country.name.common.toUpperCase().includes(search.toUpperCase())
-    );
-
-    if (filtered.length > 10) {
-      return <p>Too many matches, specify another filter</p>;
-    }
-    if (filtered.length === 1) {
-      return <CountryListItem country={filtered[0]} />;
-    }
-
-    return <CountryList countries={filtered} />;
-  };
-
-  // const searchCountry = () => {
-  //   if (search !== "") {
-  //     axios
-  //       .get("https://studies.cs.helsinki.fi/restcountries/api/all")
-  //       .then(() => {
-  //         setAllCountries(
-  //           countries.filter((country) =>
-  //             country.name.toLowerCase().includes(search.toLowerCase())
-  //           )
-  //         );
-  //         setAllCountries(search);
-  //       })
-  //       .catch((error) => {
-  //         console.error("Error fetching countries:", error);
-  //       });
-  //   }
-  // };
+  const filtered = countries.filter((country) =>
+    country.name.common.toUpperCase().includes(search.toUpperCase())
+  );
 
   return (
     <>
       <InputFilter value={search} setSearch={setSearch} />
-      {filteredContries()}
+      {search && <CountryList countries={filtered} />}
     </>
   );
 };
