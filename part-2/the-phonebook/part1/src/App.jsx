@@ -95,7 +95,7 @@ const App = () => {
   const [persons, setPersons] = useState([{ name: "Arto Hellas", id: 0 }]);
   const [newPerson, setNewPerson] = useState(emptyPerson);
   const [search, setSearch] = useState("");
-
+  const [message, setMessage] = useState("");
   useEffect(() => {
     personService
       .getAll()
@@ -131,9 +131,14 @@ const App = () => {
         .then((returnedPerson) => {
           setPersons(persons.concat(returnedPerson));
           setNewPerson(emptyPerson);
+          setMessage(`Successfully added ${newPerson.name}`);
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
         })
         .catch((error) => {
-          console.error("Error adding person:", error);
+          console.error(error);
+          setMessage(`Error adding person ${newPerson.name}`);
         });
 
       return;
@@ -162,9 +167,16 @@ const App = () => {
         );
 
         setNewPerson(emptyPerson);
+        setMessage(`Number of ${newPerson.name} is changed`);
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       })
       .catch((error) => {
-        console.error("Error updating person:", error);
+        console.error(error);
+        setMessage(
+          `Information of ${newPerson.name} has already been removed from server`
+        );
       });
   };
 
@@ -181,8 +193,16 @@ const App = () => {
     }
   };
 
+  const Notification = ({ message }) => {
+    if (message === null) {
+      return null;
+    }
+    return <div className="error">{message}</div>;
+  };
+
   return (
     <div>
+      <Notification message={message} />
       <InputFilter value={search} setSearch={setSearch} />
 
       <br />
