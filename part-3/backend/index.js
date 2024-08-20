@@ -1,7 +1,9 @@
 const express = require("express");
 const app = express();
-// const Person = require("./models/persons");
+const morgan = require("morgan");
+const cors = require("cors");
 app.use(express.json());
+app.use(cors());
 let persons = [
   {
     id: 1,
@@ -24,6 +26,22 @@ let persons = [
     number: "39-23-6423122",
   },
 ];
+
+// morgan(":method :url :status :res[content-length] - :response-time ms");
+app.use(
+  morgan((tokens, req, res) => {
+    return [
+      tokens.method(req, res),
+      tokens.url(req, res),
+      tokens.status(req, res),
+      tokens.res(req, res, "content-length"),
+      "-",
+      tokens["response-time"](req, res),
+      "ms",
+      JSON.stringify(req.body),
+    ].join(" ");
+  })
+);
 
 app.get("/api/persons", (request, response) => {
   response.json(persons);
