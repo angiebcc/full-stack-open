@@ -7,25 +7,35 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2];
 
-const url = `mongodb+srv://fullstack:<db_password>@cluster0.x7akf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const { MongoClient, ServerApiVersion } = require("mongodb");
+const url = `mongodb+srv://fullstack:${password}@cluster0.x7akf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 mongoose.set("strictQuery", false);
 
 mongoose.connect(url);
 
-const noteSchema = new mongoose.Schema({
-  content: String,
-  important: Boolean,
+const personSchema = new mongoose.Schema({
+  name: String,
+  phone: String,
 });
 
-const Person = mongoose.model("Person", noteSchema);
+const Person = mongoose.model("Person", personSchema);
+
+const name = process.argv[3];
+const phone = process.argv[4];
 
 const person = new Person({
-  content: "HTML is easy",
-  important: true,
+  name,
+  phone,
 });
 
 person.save().then((result) => {
-  console.log("note saved!");
+  console.log("person saved!");
+});
+
+Person.find({}).then((result) => {
+  result.forEach((person) => {
+    console.log(person);
+  });
   mongoose.connection.close();
 });
