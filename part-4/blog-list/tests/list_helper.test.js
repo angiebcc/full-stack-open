@@ -62,7 +62,7 @@ describe("list_helper", () => {
     assert.strictEqual(listHelper.totalLikes(blogs), 36);
   });
 
-  test("dummy returns all information of blog most liked", () => {
+  test("mostLiked returns all information of blog most liked", () => {
     assert.deepStrictEqual(listHelper.mostLiked(blogs), {
       _id: "5a422b3a1b54a676234d17f9",
       title: "Canonical string reduction",
@@ -73,11 +73,11 @@ describe("list_helper", () => {
     });
   });
 
-  test("dummy returns one", () => {
+  test("mostBlog return the author with most blogs", () => {
     console.log(listHelper.mostBlogs(blogs));
   });
 
-  test("dummy returns only name and likes of the blog most liked", () => {
+  test("mostLikedPerson returns only name and likes of the blog most liked", () => {
     assert.deepStrictEqual(listHelper.mostLikedPerson(blogs), {
       author: "Edsger W. Dijkstra",
       likes: 12,

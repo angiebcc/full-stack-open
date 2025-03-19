@@ -24,7 +24,7 @@ const mostBlogs = (blogs) => {
 
     blogCounts[author] = newBlogCount;
 
-    //fallback usado solo en la primer iteracion para inicializar el autor con mas blogs
+    //fallback used only in first iteration to initialize author with more blogs
     const maxBlogCount = blogCounts[authorWithMostBlogs] ?? 0;
 
     if (newBlogCount >= maxBlogCount) {
