@@ -74,7 +74,10 @@ describe("list_helper", () => {
   });
 
   test("mostBlog return the author with most blogs", () => {
-    console.log(listHelper.mostBlogs(blogs));
+    assert.deepStrictEqual(listHelper.mostBlogs(blogs), {
+      author: "Robert C. Martin",
+      blogs: 3,
+    });
   });
 
   test("mostLikedPerson returns only name and likes of the blog most liked", () => {
